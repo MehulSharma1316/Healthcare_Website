@@ -1,0 +1,32 @@
+# Node / backend
+node_modules/
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+/dist/
+/build/
+
+# Coverage
+coverage/
+
+# Frontend (Vite)
+client/node_modules/
+client/dist/
+client/.env
+client/.env.*
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+  @apply text-inherit no-underline;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-white bg-gradient-to-r from-sky-500 to-emerald-500 shadow-md transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-400 focus-visible:ring-offset-slate-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold border border-slate-200 text-slate-800 transition hover:border-sky-200 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-400 focus-visible:ring-offset-slate-50;
+}
+
+.card {
+  @apply rounded-2xl bg-white border border-slate-100 shadow-sm transition hover:shadow-md hover:-translate-y-0.5;
+}
+
+.section {
+  @apply max-w-6xl mx-auto px-4;
+}
