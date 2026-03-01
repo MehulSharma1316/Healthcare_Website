@@ -11,7 +11,8 @@ export default function Packages() {
 
   useEffect(() => {
     fetchPackages()
-      .then((data) => setPackages(data))
+      .catch(() => [])
+      .then((data) => setPackages(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
   }, []);
 

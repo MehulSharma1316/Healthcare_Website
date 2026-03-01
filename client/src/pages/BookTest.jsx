@@ -24,8 +24,8 @@ export default function BookTest() {
   const bookingState = location.state;
 
   useEffect(() => {
-    fetchTests().then(setTests);
-    fetchPackages().then(setPackages);
+    fetchTests().catch(() => []).then((data) => setTests(Array.isArray(data) ? data : []));
+    fetchPackages().catch(() => []).then((data) => setPackages(Array.isArray(data) ? data : []));
   }, []);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function BookTest() {
   }, [form.selectionType, tests, packages]);
 
   const selectedItem =
-    options.find((opt) => opt._id === form.selectionId) ||
+    (Array.isArray(options) ? options.find((opt) => opt._id === form.selectionId) : null) ||
     (lockInfo && lockInfo.itemId === form.selectionId ? lockInfo : null);
   const selectedPrice = selectedItem?.price;
 
@@ -127,11 +127,10 @@ export default function BookTest() {
                   key={type}
                   onClick={() => setForm({ ...form, selectionType: type, selectionId: "" })}
                   disabled={!!lockInfo}
-                  className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${
-                    form.selectionType === type
+                  className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${form.selectionType === type
                       ? "bg-sky-100 border-sky-200 text-sky-700"
                       : "border-slate-200 text-slate-700 hover:border-sky-200 hover:text-sky-700"
-                  } ${lockInfo ? "opacity-70 cursor-not-allowed" : ""}`}
+                    } ${lockInfo ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
                   {type === "test" ? "Test" : "Package"}
                 </button>
@@ -195,11 +194,10 @@ export default function BookTest() {
                 type="button"
                 key={val ? "yes" : "no"}
                 onClick={() => setForm({ ...form, homeCollection: val })}
-                className={`px-4 py-2 rounded-full border text-sm font-semibold ${
-                  form.homeCollection === val
+                className={`px-4 py-2 rounded-full border text-sm font-semibold ${form.homeCollection === val
                     ? "bg-emerald-100 border-emerald-200 text-emerald-700"
                     : "border-slate-200 text-slate-700"
-                }`}
+                  }`}
               >
                 {val ? "Yes" : "No"}
               </button>

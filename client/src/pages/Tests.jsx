@@ -9,7 +9,8 @@ export default function Tests() {
 
   useEffect(() => {
     fetchTests()
-      .then((data) => setTests(data))
+      .catch(() => [])
+      .then((data) => setTests(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
   }, []);
 
@@ -38,9 +39,8 @@ export default function Tests() {
           <button
             key={c}
             onClick={() => setCategory(c)}
-            className={`px-4 py-2 rounded-full border text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-400 focus-visible:ring-offset-slate-50 ${
-              c === category ? "bg-sky-100 border-sky-200 text-sky-700" : "border-slate-200 text-slate-700 hover:border-sky-200 hover:text-sky-700"
-            }`}
+            className={`px-4 py-2 rounded-full border text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-400 focus-visible:ring-offset-slate-50 ${c === category ? "bg-sky-100 border-sky-200 text-sky-700" : "border-slate-200 text-slate-700 hover:border-sky-200 hover:text-sky-700"
+              }`}
           >
             {c === "all" ? "All" : c}
           </button>
