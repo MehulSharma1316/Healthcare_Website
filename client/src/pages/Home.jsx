@@ -51,7 +51,7 @@ export default function Home() {
       subtitle: "Comprehensive blood profile with fasting glucose, lipid, CBC, LFT, KFT.",
       packageId: packages[0]?._id,
       image:
-        "https://images.unsplash.com/photo-1584515904893-ffcd0f5c1b2b?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
     },
     {
       id: "pkg-wellness",
