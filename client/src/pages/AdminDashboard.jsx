@@ -56,15 +56,15 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const [t, p, b, pst] = await Promise.all([
-        adminTests.list(),
-        adminPackages.list(),
-        adminBookings.list(),
-        adminPosters.list(),
+        adminTests.list().catch(() => []),
+        adminPackages.list().catch(() => []),
+        adminBookings.list().catch(() => []),
+        adminPosters.list().catch(() => []),
       ]);
-      setTests(t);
-      setPackages(p);
-      setBookings(b);
-      setPosters(pst);
+      setTests(Array.isArray(t) ? t : []);
+      setPackages(Array.isArray(p) ? p : []);
+      setBookings(Array.isArray(b) ? b : []);
+      setPosters(Array.isArray(pst) ? pst : []);
     } catch (err) {
       console.error(err);
       if (err?.response?.status === 401) {
