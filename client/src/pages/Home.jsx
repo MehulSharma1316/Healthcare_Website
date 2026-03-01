@@ -31,10 +31,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([fetchPopularPackages(), fetchPosters()])
+    Promise.all([
+      fetchPopularPackages().catch(() => []),
+      fetchPosters().catch(() => [])
+    ])
       .then(([pkgs, pstrs]) => {
-        setPackages(pkgs);
-        setPosters(pstrs);
+        setPackages(Array.isArray(pkgs) ? pkgs : []);
+        setPosters(Array.isArray(pstrs) ? pstrs : []);
       })
       .finally(() => setLoading(false));
   }, []);
