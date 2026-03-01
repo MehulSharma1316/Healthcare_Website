@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchPopularPackages, fetchPosters } from "../api";
+import { fetchPopularPackages, fetchTests, fetchPosters } from "../api";
 import Carousel from "../components/Carousel";
+import banner1 from "../assets/photo-1579684385127-1ef15d508118.avif";
+import banner2 from "../assets/photo-1516549655169-df83a0774514.avif";
+import banner3 from "../assets/photo-1530497610245-94d3c16cda28.avif";
 
 const trustPoints = [
   { title: "99%+ Accuracy", desc: "Automated analyzers with dual QC" },
@@ -50,23 +53,20 @@ export default function Home() {
       title: "Executive Health Package",
       subtitle: "Comprehensive blood profile with fasting glucose, lipid, CBC, LFT, KFT.",
       packageId: packages[0]?._id,
-      image:
-        "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
+      image: banner1,
     },
     {
       id: "pkg-wellness",
       title: "Wellness Check",
       subtitle: "Thyroid, vitamins, and metabolic markers for proactive care.",
       packageId: packages[1]?._id,
-      image:
-        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80",
+      image: banner2,
     },
     {
       id: "poster-home-collection",
       title: "Home Sample Collection",
       subtitle: "Book your slot. Hygienic, temperature-controlled transport.",
-      image:
-        "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1200&q=80",
+      image: banner3,
     },
   ].filter(Boolean);
 
