@@ -41,7 +41,7 @@ export default function Home() {
     title: p.title,
     subtitle: "",
     packageId: p.packageId,
-    image: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace("/api", "") + p.image : `http://localhost:5000${p.image}`,
+    image: p.image,
   }));
 
   const fallbackSlides = [

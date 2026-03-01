@@ -7,9 +7,7 @@ import Booking from "../models/Booking.js";
 import Admin from "../models/Admin.js";
 import Poster from "../models/Poster.js";
 import { auth } from "../middleware/auth.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
+import { cloudinary, cloudinaryUpload } from "../config/cloudinary.js";
 
 const router = Router();
 
@@ -97,6 +95,17 @@ router.put("/packages/:id", auth, async (req, res, next) => {
         return res.status(400).json({ message: "Maximum 3 popular packages allowed." });
       }
     }
+
+    // Check if image is being replaced
+    if (req.body.publicId) {
+      const existing = await Package.findById(req.params.id);
+      if (existing && existing.publicId && existing.publicId !== req.body.publicId) {
+        try {
+          await cloudinary.uploader.destroy(existing.publicId);
+        } catch (e) { console.error("Cloudinary package image delete failed:", e) }
+      }
+    }
+
     const updated = await Package.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updated);
   } catch (err) {
@@ -106,6 +115,12 @@ router.put("/packages/:id", auth, async (req, res, next) => {
 
 router.delete("/packages/:id", auth, async (req, res, next) => {
   try {
+    const existing = await Package.findById(req.params.id);
+    if (existing && existing.publicId) {
+      try {
+        await cloudinary.uploader.destroy(existing.publicId);
+      } catch (e) { console.error("Cloudinary package image delete failed:", e) }
+    }
     await Package.findByIdAndDelete(req.params.id);
     res.status(204).end();
   } catch (err) {
@@ -122,19 +137,6 @@ router.get("/bookings", auth, async (_req, res, next) => {
     next(err);
   }
 });
-
-// Multer setup
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = "uploads/";
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
 
 // Posters CRUD
 router.get("/posters", auth, async (_req, res, next) => {
@@ -157,6 +159,16 @@ router.post("/posters", auth, async (req, res, next) => {
 
 router.put("/posters/:id", auth, async (req, res, next) => {
   try {
+    // Check if image is being replaced
+    if (req.body.publicId) {
+      const existing = await Poster.findById(req.params.id);
+      if (existing && existing.publicId && existing.publicId !== req.body.publicId) {
+        try {
+          await cloudinary.uploader.destroy(existing.publicId);
+        } catch (e) { console.error("Cloudinary poster image delete failed:", e) }
+      }
+    }
+
     const updated = await Poster.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updated);
   } catch (err) {
@@ -166,6 +178,12 @@ router.put("/posters/:id", auth, async (req, res, next) => {
 
 router.delete("/posters/:id", auth, async (req, res, next) => {
   try {
+    const existing = await Poster.findById(req.params.id);
+    if (existing && existing.publicId) {
+      try {
+        await cloudinary.uploader.destroy(existing.publicId);
+      } catch (e) { console.error("Cloudinary poster image delete failed:", e) }
+    }
     await Poster.findByIdAndDelete(req.params.id);
     res.status(204).end();
   } catch (err) {
@@ -173,10 +191,10 @@ router.delete("/posters/:id", auth, async (req, res, next) => {
   }
 });
 
-router.post("/posters/upload", auth, upload.single("image"), (req, res) => {
+// Generic Cloudinary Upload Route
+router.post("/upload", auth, cloudinaryUpload.single("image"), (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-  const imageUrl = `/uploads/${req.file.filename}`;
-  res.json({ url: imageUrl });
+  res.json({ url: req.file.path, publicId: req.file.filename });
 });
 
 export default router;

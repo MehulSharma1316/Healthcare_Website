@@ -8,6 +8,8 @@ const PackageSchema = new mongoose.Schema(
     idealFor: { type: String, required: true },
     active: { type: Boolean, default: true },
     isPopular: { type: Boolean, default: false },
+    imageUrl: { type: String },
+    publicId: { type: String },
   },
   { timestamps: true }
 );

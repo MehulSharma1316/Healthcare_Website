@@ -40,7 +40,8 @@ export const adminPosters = {
   create: (payload) => api.post("/admin/posters", payload).then((r) => r.data),
   update: (id, payload) => api.put(`/admin/posters/${id}`, payload).then((r) => r.data),
   remove: (id) => api.delete(`/admin/posters/${id}`),
-  uploadImage: (formData) => api.post("/admin/posters/upload", formData, { headers: { "Content-Type": "multipart/form-data" } }).then((r) => r.data),
 };
+
+export const adminUpload = (formData) => api.post("/admin/upload", formData, { headers: { "Content-Type": "multipart/form-data" } }).then((r) => r.data);
 
 export default api;

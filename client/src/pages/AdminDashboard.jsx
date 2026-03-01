@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminBookings, adminPackages, adminTests, adminPosters } from "../api";
+import { adminBookings, adminPackages, adminTests, adminPosters, adminUpload } from "../api";
 
 const emptyTest = {
   name: "",
@@ -25,6 +25,7 @@ const emptyPoster = {
   active: true,
   packageId: "",
   order: 0,
+  publicId: "",
 };
 
 export default function AdminDashboard() {
@@ -160,13 +161,14 @@ export default function AdminDashboard() {
     try {
       const formData = new FormData();
       formData.append("image", posterImage);
-      const { url } = await adminPosters.uploadImage(formData);
+      const { url, publicId } = await adminUpload(formData);
 
       const payload = {
         title: posterForm.title,
         order: Number(posterForm.order),
         active: posterForm.active,
         image: url,
+        publicId: publicId,
       };
       if (posterForm.packageId) payload.packageId = posterForm.packageId;
 
@@ -478,7 +480,7 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {posters.map((p) => (
               <div key={p._id} className="p-4 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-start gap-4">
-                <img src={import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace("/api", "") + p.image : `http://localhost:5000${p.image}`} alt={p.title || "Poster"} className="w-24 h-16 object-cover rounded-lg" />
+                <img src={p.image} alt={p.title || "Poster"} className="w-24 h-16 object-cover rounded-lg" />
                 <div className="flex-1">
                   <p className="font-semibold text-slate-900">{p.title || "Untitled"}</p>
                   <p className="text-xs text-slate-600">Order: {p.order} {p.packageId ? `• Linked: ${p.packageId.name}` : ""}</p>
