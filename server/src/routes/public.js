@@ -2,6 +2,7 @@ import { Router } from "express";
 import Test from "../models/Test.js";
 import Package from "../models/Package.js";
 import Booking from "../models/Booking.js";
+import Poster from "../models/Poster.js";
 
 const router = Router();
 
@@ -28,11 +29,31 @@ router.get("/packages", async (_req, res, next) => {
   }
 });
 
+// Fetch strictly popular active packages
+router.get("/packages/popular", async (_req, res, next) => {
+  try {
+    const packages = await Package.find({ active: true, isPopular: true }).limit(3).sort({ name: 1 });
+    res.json(packages);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Create a booking
 router.post("/booking", async (req, res, next) => {
   try {
     const booking = await Booking.create(req.body);
     res.status(201).json(booking);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Fetch active posters
+router.get("/posters", async (_req, res, next) => {
+  try {
+    const posters = await Poster.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    res.json(posters);
   } catch (err) {
     next(err);
   }

@@ -15,6 +15,8 @@ api.interceptors.request.use((config) => {
 
 export const fetchTests = (params = {}) => api.get("/public/tests", { params }).then((r) => r.data);
 export const fetchPackages = () => api.get("/public/packages").then((r) => r.data);
+export const fetchPopularPackages = () => api.get("/public/packages/popular").then((r) => r.data);
+export const fetchPosters = () => api.get("/public/posters").then((r) => r.data);
 export const createBooking = (payload) => api.post("/public/booking", payload).then((r) => r.data);
 
 export const adminLogin = (payload) => api.post("/admin/login", payload).then((r) => r.data);
@@ -32,6 +34,13 @@ export const adminPackages = {
 };
 export const adminBookings = {
   list: () => api.get("/admin/bookings").then((r) => r.data),
+};
+export const adminPosters = {
+  list: () => api.get("/admin/posters").then((r) => r.data),
+  create: (payload) => api.post("/admin/posters", payload).then((r) => r.data),
+  update: (id, payload) => api.put(`/admin/posters/${id}`, payload).then((r) => r.data),
+  remove: (id) => api.delete(`/admin/posters/${id}`),
+  uploadImage: (formData) => api.post("/admin/posters/upload", formData, { headers: { "Content-Type": "multipart/form-data" } }).then((r) => r.data),
 };
 
 export default api;

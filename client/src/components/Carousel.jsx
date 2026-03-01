@@ -51,7 +51,6 @@ export default function Carousel({ slides = [], interval = 4500, onViewImage }) 
   };
 
   const onSlideClick = (slide) => {
-    if (slide.packageId) return; // navigation handled by Link
     if (onViewImage) onViewImage(slide);
   };
 
@@ -104,13 +103,7 @@ export default function Carousel({ slides = [], interval = 4500, onViewImage }) 
             </div>
           );
 
-          return slide.packageId ? (
-            <Link key={slide.id} to="/packages" state={{ highlightId: slide.packageId }}>
-              {content}
-            </Link>
-          ) : (
-            content
-          );
+          return content;
         })}
       </div>
 
@@ -142,9 +135,8 @@ export default function Carousel({ slides = [], interval = 4500, onViewImage }) 
               key={slide.id}
               aria-label={`Go to slide ${idx + 1}`}
               onClick={() => goTo(idx)}
-              className={`h-2.5 rounded-full transition ${
-                idx === index ? "w-6 bg-white shadow" : "w-2.5 bg-white/60 hover:bg-white"
-              }`}
+              className={`h-2.5 rounded-full transition ${idx === index ? "w-6 bg-white shadow" : "w-2.5 bg-white/60 hover:bg-white"
+                }`}
             />
           ))}
         </div>

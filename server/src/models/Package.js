@@ -7,6 +7,7 @@ const PackageSchema = new mongoose.Schema(
     testsIncluded: [{ type: String, required: true }],
     idealFor: { type: String, required: true },
     active: { type: Boolean, default: true },
+    isPopular: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchPackages } from "../api";
+import { fetchPopularPackages, fetchPosters } from "../api";
 import Carousel from "../components/Carousel";
 
 const trustPoints = [
@@ -24,15 +24,27 @@ const steps = [
 
 export default function Home() {
   const [packages, setPackages] = useState([]);
+  const [posters, setPosters] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPackages()
-      .then((data) => setPackages(data.slice(0, 3)))
+    Promise.all([fetchPopularPackages(), fetchPosters()])
+      .then(([pkgs, pstrs]) => {
+        setPackages(pkgs);
+        setPosters(pstrs);
+      })
       .finally(() => setLoading(false));
   }, []);
 
-  const slides = [
+  const dynamicSlides = posters.map((p) => ({
+    id: p._id,
+    title: p.title,
+    subtitle: "",
+    packageId: p.packageId,
+    image: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace("/api", "") + p.image : `http://localhost:5000${p.image}`,
+  }));
+
+  const fallbackSlides = [
     {
       id: "pkg-basic",
       title: "Executive Health Package",
@@ -57,6 +69,8 @@ export default function Home() {
         "https://images.unsplash.com/photo-1530023367847-a683933f4177?auto=format&fit=crop&w=1200&q=80",
     },
   ].filter(Boolean);
+
+  const slides = dynamicSlides.length > 0 ? dynamicSlides : fallbackSlides;
 
   const [lightbox, setLightbox] = useState(null);
 
@@ -156,10 +170,22 @@ export default function Home() {
             )}
             <div className="p-4 md:p-6 space-y-1">
               <p className="text-xs uppercase tracking-wide text-sky-700 font-semibold">
-                {lightbox.tagline || "Offer"}
+                {lightbox.tagline || (lightbox.packageId ? "Offer" : "Announcement")}
               </p>
               <h3 className="text-xl font-bold text-slate-900">{lightbox.title}</h3>
               <p className="text-sm text-slate-600">{lightbox.subtitle}</p>
+
+              {lightbox.packageId && (
+                <div className="pt-4">
+                  <Link
+                    to="/packages"
+                    state={{ highlightId: typeof lightbox.packageId === 'object' ? lightbox.packageId._id : lightbox.packageId }}
+                    className="btn-primary"
+                  >
+                    Book This Package
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -217,7 +243,11 @@ export default function Home() {
                   {pkg.testsIncluded?.length > 4 && <li>+{pkg.testsIncluded.length - 4} more</li>}
                 </ul>
                 <div className="pt-2">
-                  <Link to="/book" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+                  <Link
+                    to="/book"
+                    state={{ source: "package", itemId: pkg._id, name: pkg.name, price: pkg.price }}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700"
+                  >
                     Book this package →
                   </Link>
                 </div>

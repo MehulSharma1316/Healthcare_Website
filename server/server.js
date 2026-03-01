@@ -26,6 +26,8 @@ mongoose
     process.exit(1);
   });
 
+app.use("/uploads", express.static("uploads"));
+
 app.get("/", (_req, res) => {
   res.send("Shree Shyam Healthcare API running");
 });
