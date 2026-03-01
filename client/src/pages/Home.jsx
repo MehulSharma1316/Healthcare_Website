@@ -59,14 +59,14 @@ export default function Home() {
       subtitle: "Thyroid, vitamins, and metabolic markers for proactive care.",
       packageId: packages[1]?._id,
       image:
-        "https://images.unsplash.com/photo-1582719478248-54e9f2af44be?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80",
     },
     {
       id: "poster-home-collection",
       title: "Home Sample Collection",
       subtitle: "Book your slot. Hygienic, temperature-controlled transport.",
       image:
-        "https://images.unsplash.com/photo-1530023367847-a683933f4177?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1200&q=80",
     },
   ].filter(Boolean);
 
